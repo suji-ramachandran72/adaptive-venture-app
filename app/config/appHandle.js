@@ -1,0 +1,1 @@
+export const APP_HANDLE = "adaptive-venture-app-9"; 
