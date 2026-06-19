@@ -390,8 +390,7 @@ export default function ProductEditPage() {
     return Object.keys(newErrors).length === 0;
   }
   function computeVariantDiff() {
-    return state.variants
-      .map((v) => {
+    return state.variants.map((v) => {
         const orig = originalRef.current.variants.find((o) => o.id === v.id);
         if (!orig) return v;
         const diff = { id: v.id, };
