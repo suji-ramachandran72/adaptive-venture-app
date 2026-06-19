@@ -66,7 +66,7 @@ const GQL_DELETE_METAFIELDS = `#graphql
 //Loader
 export const loader = async ({ request, params }) => {
   const { handle } = params;
-  if (!handle || handle == "null") throw new Response("Handle is required to load product", { status: 400 });
+  if (!handle) throw new Response("Handle is required to load product", { status: 400 });
   const { admin, session } = await authenticate.admin(request);
   if (!session || !admin) { throw new Response("Unauthorized session", { status: 401 }); }
   const tab = new URL(request.url).searchParams.get("tab");
@@ -93,10 +93,6 @@ export const loader = async ({ request, params }) => {
   const data = await res.json();
   const raw = data?.data?.products?.edges?.[0]?.node;
   if (!raw) throw new Response("Product not found", { status: 404 });
-  console.log(raw.variants.edges.map(({ node }) => ({
-    id: node.id,
-    options: node.selectedOptions,
-  })));
   const variants = raw.variants.edges.map(({ node }) => ({
     id: node.id,
     sku: node.inventoryItem?.sku || "",
@@ -137,7 +133,6 @@ export const action = async ({ request, params }) => {
   catch { return Response.json({ error: "Invalid product payload" }, { status: 400 }); }
   const productId = formData.get("productId");
   if (!productId) return Response.json({ error: "Invalid product payload" }, { status: 400 });
-  // Parse JSON arrays sent from the browser
   let variants, metafieldsToUpsert, metafieldsToDelete;
   try {
     variants = JSON.parse(formData.get("variants") || "[]");
@@ -146,8 +141,7 @@ export const action = async ({ request, params }) => {
   } catch {
     return Response.json({ error: "Invalid product payload" }, { status: 400 });
   }
-  if (!productId) return Response.json({ error: "Product ID is missing" });
-  const changedVariants = variants;
+   const changedVariants = variants;
   const productRes = await admin.graphql(GQL_GET_PRODUCT, {
     variables: { query: `id:${productId}` }
   });
@@ -235,7 +229,6 @@ export const action = async ({ request, params }) => {
     success: true
   });
 }
-
 // MAIN COMPONENT
 export default function ProductEditPage() {
   const { product } = useLoaderData();
