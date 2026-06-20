@@ -352,7 +352,7 @@ export default function ProductEditPage() {
   function validate() {
     const newErrors = {};
     state.variants.forEach((v, idx) => {
-      const priceRegex = /^\d+(\.\d{1,2})?$/;
+      const priceRegex = /^\d+(\.\d{1,2})$/;
       const isPriceValid = priceRegex.test(v.price) && parseFloat(v.price) >= 0;
       const isWeightValid = v.weight === "" || (!isNaN(parseFloat(v.weight)) && parseFloat(v.weight) > 0);
       const skuList = state.variants.map((v) => v.sku?.trim()).filter(Boolean);
@@ -459,12 +459,8 @@ export default function ProductEditPage() {
           {!["variants", "metafields"].includes(activeTab) && (
             <span style={{ ...S.statusMsg, color: "red" }}>Unsupported tab</span>
           )}
-          <button onClick={handleDiscard} disabled={!isDirty || isSaving} style={{ ...S.btn, ...S.btnDiscard, ...(!isDirty || isSaving ? S.btnDisabled : {}) }}>
-            Discard
-          </button>
-          <button onClick={handleSave} disabled={!isDirty || isSaving} style={{ ...S.btn, ...S.btnSave, ...(!isDirty || isSaving ? S.btnDisabled : {}) }}>
-            {isSaving ? "Saving…" : "Save"}
-          </button>
+          <LabelButton label="Discard" onClick={handleDiscard} disabled={!isDirty || isSaving} style={S.btnDiscard} />
+         <LabelButton label={isSaving ? "Saving…" : "Save"} onClick={handleSave} disabled={!isDirty || isSaving} style={S.btnSave} />
           {!isSaving && !isDirty && !saveResult?.error && !actionData?.error && (
             <span style={{ ...S.statusMsg, color: "#888" }}>No changes to save.</span>
           )} 
@@ -710,6 +706,8 @@ export default function ProductEditPage() {
 function TabButton({ active, onClick, children }) {
   return (<button onClick={onClick} style={{ padding: "10px 22px", backgroundColor: active ? "#008060" : "#e8e8e8", color: active ? "white" : "#333", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: "bold", fontSize: 14, }}>{children} </button>);
 }
+function LabelButton({ label, onClick, disabled, style }) { 
+  return <button onClick={onClick} disabled={disabled} style={{ ...S.btn, ...style, ...(disabled ? S.btnDisabled : {}) }}>{label}</button>; }
 function Err({ children }) {
   return <div style={{ color: "red", fontSize: 11, marginTop: 3 }}>{children}</div>;
 }
