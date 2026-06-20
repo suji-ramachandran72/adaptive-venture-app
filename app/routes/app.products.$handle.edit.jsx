@@ -456,11 +456,11 @@ export default function ProductEditPage() {
           {!isSaving && actionData?.error && (
             <span style={{ ...S.statusMsg, color: "red" }}> {actionData.error}</span>
           )}
-          {!["variants", "metafields"].includes(activeTab) && (
+          {/* {!["variants", "metafields"].includes(activeTab) && (
             <span style={{ ...S.statusMsg, color: "red" }}>Unsupported tab</span>
-          )}
+          )} */}
           <LabelButton label="Discard" onClick={handleDiscard} disabled={!isDirty || isSaving} style={S.btnDiscard} />
-         <LabelButton label={isSaving ? "Saving…" : "Save"} onClick={handleSave} disabled={!isDirty || isSaving} style={S.btnSave} />
+          <LabelButton label={isSaving ? "Saving…" : "Save"} onClick={handleSave} disabled={!isDirty || isSaving} style={S.btnSave} />
           {!isSaving && !isDirty && !saveResult?.error && !actionData?.error && (
             <span style={{ ...S.statusMsg, color: "#888" }}>No changes to save.</span>
           )} 
@@ -473,9 +473,9 @@ export default function ProductEditPage() {
         <TabButton active={activeTab === "metafields"} onClick={() => setActiveTab("metafields")}>
           Metafields
         </TabButton>
-        <TabButton active={activeTab === "basic"} onClick={() => setActiveTab("basic")}>
+        {/* <TabButton active={activeTab === "basic"} onClick={() => setActiveTab("basic")}>
           Basic
-        </TabButton>
+        </TabButton> */}
       </div>
       {activeTab === "variants" && (
         <div style={S.card}>
@@ -697,9 +697,9 @@ export default function ProductEditPage() {
           )}
         </div>
       )}
-      {activeTab === "basic" && (
+      {/* {activeTab === "basic" && (
         <div style={S.card}><p style={{ color: "#888" }}>Basic editing is not yet supported.</p></div>
-      )}
+      )} */}
     </div>
   );
 }
